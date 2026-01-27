@@ -1,0 +1,16 @@
+30
+5
+5 10.0.0.2
+4 10.0.0.3
+4 10.0.0.1
+/admin
+/api
+/index.html
+/missing.html
+/old-page
+/products
+16 200
+5 404
+3 500
+3 403
+3 301
