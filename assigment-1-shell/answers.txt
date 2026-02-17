@@ -1,16 +1,6 @@
-30
-5
-5 10.0.0.2
-4 10.0.0.3
-4 10.0.0.1
-/admin
-/api
-/index.html
-/missing.html
-/old-page
-/products
-16 200
-5 404
-3 500
-3 403
-3 301
+wc -l < access.log
+grep '404' access.log | wc -l
+awk '{print $1}' access.log | sort | uniq -c | sort -nr | head -3
+awk '{print $3}' access.log | sort | uniq
+awk '{print $2}' access.log | sort | uniq -c | sort -nr
+
