@@ -1,0 +1,71 @@
+CSCI 2510 Studio 1
+Max Chen
+02/18/2026
+
+
+2. fprintf() header
+
+#include <stdio.h>
+
+3. function signatures
+
+printf:
+int printf(const char *format, ...);
+
+fprintf:
+int fprintf(FILE *stream, const char *format, ...);
+
+fprintf() takes an additional first parameter (FILE *stream) that specifies
+the output stream. printf() always writes to standard output (stdout),
+while fprintf() allows you to specify it
+
+4. description differences
+
+The manual says printf() writes output to standard output.
+fprintf() writes output to the specified output stream.
+Therefore, fprintf() is more flexible because it allows writing to
+different streams
+
+5. fprintf output
+
+Hello, world!
+
+6. system call section num
+
+System calls are located in Section 2 of the Linux manual.
+
+7. write() header file
+
+#include <unistd.h>
+
+8.
+
+9. write() instead of fprintf
+
+#include <unistd.h>
+
+int main(int argc, char* argv[]) {
+
+    char message[] = "Hello, world!\n";
+
+    write(STDOUT_FILENO, message, 14);
+
+    return 0;
+}
+
+10. character buffer 
+
+System reads however many bytes you put, starting at the buffer address, reading past the string input, which will spit out garbage. 
+
+11. C library functions vs system calls
+
+use fprintf when:
+- writing portable programs
+- writing application level software
+- want formatting
+
+system calls:
+- low-level coding
+- building an OS
+- remove buffering
+

@@ -1,1 +1,12 @@
-//Replace this file with the contents of your hello_fprintf.c
+// Max Chen
+// 02/18/2026
+// Prints a Hello World message using fprintf()
+
+#include <stdio.h>
+
+int main(int argc, char* argv[]) {
+
+    fprintf(stdout, "Hello, world!\n");
+
+    return 0;
+}
