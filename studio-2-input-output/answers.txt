@@ -1,0 +1,17 @@
+2. When I ran cat < mars.txt, cat read mars.txt and printed them directly to the terminal.
+
+3. When I ran cat < mars.txt > new.txt, the input was taken from mars.txt and the output was redirected into new.txt. Nothing appeared on the terminal. When I opened new.txt, it contained an exact copy of mars.txt.
+
+4. When I ran cat > new.txt, anything I typed was written into new.txt instead of being displayed normally on the terminal. After pressing CTRL-D, the file had what I typed. If new.txt already existed, it was overwritten.
+
+5. When I used >> instead of >, the text I entered was appended to the end of new.txt instead of replacing its contents. Running the command multiple times kept adding new text to the existing file.
+
+6. #include <unistd.h>
+
+8. The return type of read() is ssize_t. It returns 0 for EOF. It returns -1 if an error occurs.
+
+9. After compilation, the program behaved the same as cat.
+
+10. Changing bufferSize does not affect correctness as long as it is greater than 0. Even if it is very small, the program still works correctly, but it reads and writes smaller chunks at a time.
+
+11. A small bufferSize causes more system calls, which increases overhead and reduces performance but uses less memory. A large bufferSize reduces the number of system calls and improves performance but uses more memory. The tradeoff is between efficiency and memory usage.
