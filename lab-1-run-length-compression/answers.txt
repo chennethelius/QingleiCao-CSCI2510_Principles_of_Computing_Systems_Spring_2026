@@ -1,0 +1,37 @@
+CSCI 2510 - Lab 1: Run Length Compression
+Question Responses
+
+1. Max Chen
+
+2. RLE works well when the input data contains lots of repeats like "AAAAAAAAAA" because you can just summarize
+   the number of repeated chars like xA.
+
+   RLE works poorly when the input has lots of alternating characters like "ABABABABAB",
+   because it still has to read each char switch individually.
+
+3. The strong_bias file should compress best because it has the most single values like 0, creating
+   the longest runs of repeated characters.
+
+   Compression ratios (original size / compressed size):
+   - 1mil_random:      1000000 / 1598828 = 0.63 
+   - 1mil_weak_bias:   1000000 / 851464  = 1.17
+   - 1mil_strong_bias: 1000000 / 409084  = 2.44
+
+   The strong_bias file compresses best with a ratio of 2.44.
+   The random file expands because there are very few long runs,
+   so the overhead of the count bytes makes the output larger than the input.
+
+4. Using "time ./rle test4 output 1 0":
+   Real time: ~7.848 seconds.
+
+5. Using "time ./rle test4 output 10 0":
+   Real time: ~0.793 seconds, 10x faster than prev
+
+   Using compression length = 10, there are 1/10 the
+   read() and write() system calls. Each read() call fetches 10 bytes instead
+   of 1. System calls are expensive because switching between user
+   space and kernel space is expensive. For length = 1, the program only read() 1 call per
+   byte, while with length 10 it makes one read()
+   call per 10 bytes, allowing it to read 10x faster.
+
+6. N/A
