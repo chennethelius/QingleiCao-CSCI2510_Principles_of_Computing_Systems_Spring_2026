@@ -1,0 +1,70 @@
+CSCI 2510: Studio 5 - Fork and Exec
+Max Chen
+
+Exercise 1:
+Using getpid() to print the process PID:
+
+Run 1: My PID is: 13665
+Run 2: My PID is: 13679
+Run 3: My PID is: 13701
+
+The PID changes each time the program is run because the OS assigns a new
+unique process identifier for each new process.
+
+Exercise 2:
+After adding fork() before the getpid()/printf calls, the program prints
+two lines of output instead of one, because fork() creates a copy of the
+process. Both the parent and the child run the printf statement:
+
+My PID is: 13665
+My PID is: 13666
+
+Exercise 3:
+The man for fork():
+- On success, the PID of the child process is returned to the parent process,
+  and 0 is returned to the child process.
+- On failure, -1 is returned to the parent process, no child process is
+  created, and errno is set appropriately.
+
+Exercise 4:
+
+I am the child process. My PID is: 13666
+I am the parent process. My PID is: 13665
+
+Exercise 5:
+Adding sleep(3) to the child process makes the parent prints its PID
+immediately, and then about 3 seconds later the child prints its PID:
+
+I am the parent process. My PID is: 13665
+$ I am the child process. My PID is: 13666
+
+The parent finishes and returns to the shell before
+the child wakes up from sleep. This should be avoided because the order is wrong.
+
+Exercise 6:
+After adding waitpid(child_PID, NULL, 0) in the parent, the parent now
+waits for the child to finish before printing its own PID. The output is in order:
+
+I am the child process. My PID is: 13666
+I am the parent process. My PID is: 13665
+
+The parent blocks until the child completes (after sleeping 3 seconds),
+so the child's output always appears first, and the shell prompt appears
+only after both processes have finished.
+
+Exercise 7:
+
+total 96
+-rwxr-xr-x@ 1 maxchen  staff  33864 Mar 26 00:14 fork
+-rw-r--r--@ 1 maxchen  staff    736 Mar 25 23:54 fork.c
+-rw-r--r--  1 maxchen  staff   5946 Mar 25 23:52 README.md
+
+Exercise 8:
+
+I am the child process. My PID is: 13666
+total 96
+-rwxr-xr-x@ 1 maxchen  staff  33864 Mar 26 00:14 fork
+-rw-r--r--@ 1 maxchen  staff    736 Mar 25 23:54 fork.c
+-rw-r--r--  1 maxchen  staff   5946 Mar 25 23:52 README.md
+I am the parent process. My PID is: 13665
+
