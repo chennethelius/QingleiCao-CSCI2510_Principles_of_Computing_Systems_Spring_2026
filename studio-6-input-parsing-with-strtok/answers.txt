@@ -1,0 +1,63 @@
+Studio 6 - Parsing String Input Answers
+========================================
+
+1)
+Enter input: Hello World
+Hello World
+
+
+2)
+The first call to strtok() takes the string to be parsed as its first argument.
+Afterit  calls pass NULL as the first argument, which tells strtok() to
+continue parsing the string where it left off.
+
+
+3)
+The delimiter character for text input should be " "
+
+
+4)
+Enter input: Hello World
+Hello
+
+
+5)
+Enter input: This is an input string
+This
+is
+an
+input
+string
+
+
+6)
+    char* newline = strchr(buffer, '\n');
+    if (newline) {
+        *newline = '\0';
+    }
+
+
+8)
+  cmd = strtok(buffer, " ");
+
+
+9)
+    my_argv[0] = cmd;
+    int i = 1;
+    char* res = strtok(NULL, " ");
+    while (res != NULL) {
+        my_argv[i] = res;
+        i++;
+        res = strtok(NULL, " ");
+    }
+    my_argv[i] = NULL;
+
+
+10
+    execvp(cmd, my_argv);
+Program output:
+Enter input: ls -l
+total 96
+-rw-r--r--  1 maxchen  staff   5844 Mar 25 23:52 README.md
+-rwxr-xr-x  1 maxchen  staff  33880 Mar 31 13:08 studio6
+-rw-r--r--  1 maxchen  staff    932 Mar 31 13:07 studio6.c
