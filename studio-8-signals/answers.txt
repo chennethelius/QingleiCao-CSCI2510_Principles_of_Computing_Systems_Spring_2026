@@ -1,0 +1,54 @@
+CSCI 2510: Studio 8
+
+1)
+Sleeper's PID is: 12345
+Slept for 0 iterations!
+Slept for 1 iterations!
+Slept for 2 iterations!
+Slept for 3 iterations!
+^C
+
+2. SIGINT is signal number 2. The comment says "Term" and the
+description is "Interrupt from keyboard".
+
+3. Ran `kill -s 2 <pid>` from the other terminal and the sleeper got
+killed, same as hitting CTRL-C.
+
+4. I tried SIGTSTP (signal 20). It suspended the process
+instead of killing it.
+
+Slept for 0 iterations!
+Slept for 1 iterations!
+Slept for 2 iterations!
+[1]+  Stopped                 ./sleep
+
+5. Both the sleeper and the caller got killed. The parent never printed
+its success message since SIGINT hit both processes.
+
+6.
+
+void handle_sigint( int signum ){
+	printf("Parent: Ignoring SIGINT (signal %d)\n", signum);
+}
+
+In main() before the fork:
+
+	signal(SIGINT, handle_sigint);
+
+7. 
+
+Forking sleeper...
+Waiting for sleeper 12346...
+Sleeper's PID is: 12346
+Slept for 0 iterations!
+Slept for 1 iterations!
+Slept for 2 iterations!
+^CParent: Ignoring SIGINT (signal 2)
+Parent finished waiting and returned successfully!
+
+The sleeper dies from SIGINT but the parent catches it, prints the
+message, and then waitpid() returns normally.
+
+8. When running a long computation or file download and want to
+save progress before quitting, you could catch SIGTERM to write out
+a checkpoint file first instead of just dying and losing everything.
