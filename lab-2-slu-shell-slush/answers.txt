@@ -1,0 +1,12 @@
+CSCI 2510 Lab 2:
+
+1.
+
+   I think it meets all of the requirements.
+
+2.
+
+     Did the directory prompt. It displays the current directory
+     relative to the user's home directory. If the home directory is
+     /home/user and the current directory is /home/user/dir1/dir2, the prompt shows:
+     slush|dir1/dir2>
