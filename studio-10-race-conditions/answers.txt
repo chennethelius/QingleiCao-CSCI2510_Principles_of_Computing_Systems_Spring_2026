@@ -1,0 +1,70 @@
+CSCI 2510: Studio 10 Race Conditions
+
+1.
+
+int race = 0;
+
+void *adder(void *arg) {
+    for (int i = 0; i < 2000000; i++) {
+        race = race + 1;
+    }
+    return NULL;
+}
+
+void *subtractor(void *arg) {
+    for (int i = 0; i < 2000000; i++) {
+        race = race - 1;
+    }
+    return NULL;
+}
+
+2. If exec in main(), race will be 0 because
+   we add two million then subtract two million. Tested: result is 0.
+
+3. For two different threads, the value wouldn't
+   be 0 because of a race condition. The operations race = race + 1 and
+   race = race - 1 are not atomic, so updates
+   from one thread can overwrite updates from the other. The final value
+   is unpredictable, somewhere between -2,000,000 and +2,000,000.
+
+4. 
+   race = -1998936
+   race = -160084
+   race = -1999796
+   race = -1467035
+   race = -1999791
+
+5. The statements race = race + 1 and race = race - 1 each compile into
+   multiple machine instructions: load race into reg, modify then store.
+   If thread A loads race, then thread B loads race, both modify their own copy,
+   and both store back, one update is lost.
+   The min value is -2,000,000 (if every adder update
+   gets overwritten). The max is
+   +2,000,000 (if every subtractor update gets overwritten by an adder).
+
+6. With more iterations the race condition still
+   appears far from 0. With only 1000 iterations, the
+   threads often finish too quickly, so the result
+   is 0 or close to 0; the race condition is rare.
+
+7. Yes. With one core the OS scheduler can preempt one
+   thread during read-modify-write and switch to
+   the other thread. When the first thread resumes, its cached register
+   value is stale and overwrites the other thread's work.
+
+8. The result is 0 (or very close to 0). The race condition
+   disappears when the program is restricted to a single processor.
+
+9. With 200,000,000 operations on one core, the result is not 0 anymore.
+
+10. A race condition on a single core requires that the
+    scheduler preempt a thread in the middle of a read-modify-write
+    sequence. With only 2,000,000 iterations, each thread finishes
+    well within a single scheduler time slice, so no preemption
+    occurs mid-operation and the threads can run back-to-back.
+    With 200,000,000 iterations, each thread's loop far exceeds the
+    time slice, forcing the scheduler to preempt mid-loop. Once a
+    thread is preempted between its load and its store of race, the
+    other thread can run, modify race, and have its update overwritten
+    when the first thread resumes and writes back its stale value.
+    So the race condition emerges even on a single processor.
