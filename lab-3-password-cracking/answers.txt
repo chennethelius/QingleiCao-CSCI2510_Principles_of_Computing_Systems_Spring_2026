@@ -1,0 +1,126 @@
+CSCI 2510 Lab 3: crack
+
+1.  Max Chen
+
+2.  pass
+
+3.  ferry
+
+4. 
+
+        real    57.81 s
+        user    57.04 s
+        sys      0.13 s
+
+5.
+        Threads   Real (s)   User (s)
+        ------------------------------
+           1       57.81      57.04
+           2       30.14      59.32
+           4       16.17      63.09
+           8       10.38      71.92
+          13       10.27      72.13
+          26       10.18      72.31
+
+6.  
+        Threads   Real (s)   Hash rate (hashes/s)
+        --------------------------------------------
+           2       30.14         409,974
+           4       16.17         764,170
+           8       10.38       1,190,427
+          13       10.27       1,203,178
+          26       10.18       1,213,814
+
+7.  
+
+           2 threads  -> 1.92x  (ideal 2x)
+           4 threads  -> 3.58x  (ideal 4x)
+           8 threads  -> 5.57x  (ideal 8x)
+          13 threads  -> 5.63x
+          26 threads  -> 5.68x
+
+    2 and 4 threads scale near-linearly because the program is
+     parallel, each thread has its own crypt_data and
+    disjoint index range, no locks or shared writes.
+
+    Falloff past 4 threads is because
+    threads 5-8 land on slower E-cores. Past 8 threads, every core is
+    full, so extra threads only add scheduling overhead - real
+    time plateaus near 10.2 s while user time climbs (57 -> 72 s).
+
+8.  Max hash rate: ~1.21 M hashes/s (26 threads, 10.18 s).
+
+9. 
+
+        Size    Hashes                Cumulative
+        -------------------------------------------------
+          1                       26                    26
+          2                      676                   702
+          3                   17,576                18,278
+          4                  456,976               475,254
+          5               11,881,376            12,356,630
+          6              308,915,776           321,272,406
+          7            8,031,810,176         8,353,082,582
+          8          208,827,064,576       217,180,147,158
+
+10. Exhaustion time at ~1.21 M hashes/s:
+
+        Size    Time
+        ----------------------
+          1     ~21 us
+          2     ~0.58 ms
+          3     ~15 ms
+          4     ~0.39 s
+          5     ~10.2 s
+          6     ~4.4 min
+          7     ~1.9 hours
+          8     ~2.07 days
+
+    Each extra character multiplies the search space by 26. Going from
+    6 to 8 chars jumps exhaustion from ~4 min to ~2 days, which is multiplicative cost to the attacker. This is
+    why passwords only need to be long.
+
+11. Time to exhaust 6-char keyspace with larger alphabets at 1.21 M/s:
+
+        Alphabet                              Size    Space            Time
+        ----------------------------------------------------------------------
+        lowercase                              26      308,915,776     ~4.2 min
+        lower + upper                          52   19,770,609,664     ~4.5 hr
+        lower + upper + digits                 62   56,800,235,584     ~13 hr
+        lower + upper + digits + symbols       93  646,990,183,449     ~6.2 days
+
+    Doubling the alphabet (26 -> 52) costs ~64x more work (2^6). Full
+    printable (93) costs ~2000x more. Combined with length, mixed
+    passwords are impractical to brute-force on commodity hardware.
+
+12. N/a.
+
+
+13. 
+
+    (a)
+
+        abA.g8pU2Iffo  ->  salts
+        cdfnIXMyMCpPg  ->  salts
+        efgC/gw8PDKhs  ->  salts
+        ghLneTdBMxJP.  ->  salts
+        ijSsXTgIC7QRU  ->  salts
+        klr7dT7cAODsk  ->  donot
+        mn4iWfK0m76t6  ->  skipp
+        opjPsgpXaahxM  ->  anyyy
+        qr6ncfvfqecME  ->  salts
+
+        Message: "do not skip any salts." 
+
+    (b) 
+
+        i.  Unsalted hashes let an attacker build one
+            lookup table and reuse it against every leak forever. A
+            2-char salt forces 676 (or 4096) separate tables before
+            any lookup.
+
+        ii. Amortization across users/databases. Without salts, 10,000
+            users with password 'password' share one hash. Per-user salts make each hash unique, so
+            attackers must attack every user individually, and work on
+            one leak doesn't transfer to the next.
+
